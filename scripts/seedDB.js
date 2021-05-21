@@ -4,13 +4,7 @@ require('dotenv').config();
 
 // This file empties the Books collection and inserts the books below
 
-console.log("process.env: "+process.env.MONGODB_URI);
-mongoose.connect(
-  process.env.MONGODB_URI
-);
-
-mongoose.set('useCreateIndex', true);
-mongoose.connect(process.env.MONGODB_URI, { 
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/reactreadinglist", { 
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
