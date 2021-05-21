@@ -1,10 +1,14 @@
 import axios from "axios";
 
-let bookString = "https://www.googleapis.com/books/v1/volumes?q='harry potter'";
 
 export default {
   // Gets google books by search criterial
-  getGoogleBooks: function() {
+  getGoogleBooks: function(searchString) {
+    // use a regular expression to replace spaces with +
+    let noSpaceSearch = searchString.replace(/\s/g, '+');
+    console.log(noSpaceSearch);
+    let bookString = `https://www.googleapis.com/books/v1/volumes?q=${noSpaceSearch}&maxResults=20&printType=books`;
+    // let bookString = `https://www.googleapis.com/books/v1/volumes?q=${noSpaceSearch}`;
     return axios.get(bookString);
   },
   // Gets all database books

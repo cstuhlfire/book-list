@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Jumbotron from "../components/Jumbotron";
 import API from "../utils/API";
 import { Col, Row } from "../components/Grid";
@@ -11,15 +11,6 @@ function Search() {
   const [books, setBooks] = useState([])
   const [bookObject, setbookObject] = useState({})
 
-  // Loads all books and sets them to books
-  function loadBooks() {
-    API.getGoogleBooks(bookObject.searchString)
-      .then(res => 
-        setBooks(res.data.items)
-      )
-      .catch(err => console.log(err));
-  };
-
   // Handles updating component state when the user types into the input field
   function handleInputChange(event) {
     const { name, value } = event.target;
@@ -30,14 +21,23 @@ function Search() {
   // Then reload books from the database
   function handleFormSubmit(event) {
     event.preventDefault();
+
     API.getGoogleBooks(bookObject.searchString)
-    .then(res => 
-      setBooks(res.data.items)
-    )
+    .then(res => {
+      console.log(res.data.items);
+      if (res.data.items === undefined) {
+        books = [];
+      }
+      else {
+        setBooks(res.data.items);
+      }
+
+    })
     .catch(err => console.log(err));
 
   };
   
+ 
   // function handleSave(event) {
   //   event.preventDefault();
   //   if (bookObject.title && bookObject.author) {
@@ -50,7 +50,7 @@ function Search() {
   //       .catch(err => console.log(err));
   //   }
   // };
-
+  console.log(books);
     return (
       <div className="container">
         <Row>
@@ -89,20 +89,28 @@ function Search() {
             <div style={{margin: 10}}>
               <Row>          
                 <Col size="md-12">
-                  {books.length ? (
+                  {books.length > 0 ? (
 
                     <List>
                       {books.map(book => (
-                        <ListItem key={1}>
-                          <div>
+                        <ListItem key={book.id}>
+                         <div style={{paddingBottom: 30}}>
+                            <span>
                             <FormBtn onClick={handleFormSubmit}>Save</FormBtn>
                             <FormBtn onClick={handleFormSubmit}>View</FormBtn>
+                            </span>
+                             <h5>{book.volumeInfo.title} by {book.volumeInfo.authors.map((author) => author+" ")}</h5>
                           </div>
-                          <div>
-                            <strong>
-                              {book.volumeInfo.title}
-                            </strong>
-                          </div>
+                          <Row>
+                              <Col size="md-2">
+                                  {(book.volumeInfo.hasOwnProperty("imageLinks")) ? (
+                                    <img src={book.volumeInfo.imageLinks.smallThumbnail} alt={book.volumeInfo.title}/>
+                                  ) : (<img src="" alt={book.volumeInfo.title}/>)}
+                              </Col>
+                              <Col size="md-8">
+                                  <p>{book.volumeInfo.description}</p>
+                              </Col>
+                          </Row>
                         </ListItem>
                       ))}
                     </List>
