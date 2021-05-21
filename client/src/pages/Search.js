@@ -17,14 +17,13 @@ function Search() {
     setbookObject({...bookObject, [name]: value})
   };
 
-  // When the form is submitted, use the API.saveBook method to save the book data
+  // When the form is submitted, use the saveBooks method to save the book data
   // Then reload books from the database
   function handleFormSubmit(event) {
     event.preventDefault();
 
     API.getGoogleBooks(bookObject.searchString)
     .then(res => {
-      console.log(res.data.items);
       if (res.data.items === undefined) {
         books = [];
       }
@@ -38,18 +37,18 @@ function Search() {
   };
   
  
-  // function handleSave(event) {
-  //   event.preventDefault();
-  //   if (bookObject.title && bookObject.author) {
-  //     API.saveBook({
-  //       title: bookObject.title,
-  //       author: bookObject.author,
-  //       synopsis: bookObject.synopsis
-  //     })
-  //       .then(res => loadBooks())
-  //       .catch(err => console.log(err));
-  //   }
-  // };
+  function handleSaveSubmit(book) {
+     console.log(book);
+    if (book.volumeInfo.title) {
+      API.saveBook({
+        title: book.volumeInfo.title,
+        author: book.volumeInfo.authors[0],
+        description: book.volumeInfo.description
+      })
+        .then(res => alert("Books saved"))
+        .catch(err => console.log(err));
+    }
+  };
   console.log(books);
     return (
       <div className="container">
@@ -90,13 +89,13 @@ function Search() {
               <Row>          
                 <Col size="md-12">
                   {books.length > 0 ? (
-
                     <List>
                       {books.map(book => (
-                        <ListItem key={book.id}>
+                        
+                         <ListItem key={book.id}>
                          <div style={{paddingBottom: 30}}>
                             <span>
-                            <FormBtn onClick={handleFormSubmit}>Save</FormBtn>
+                            <FormBtn onClick={() => handleSaveSubmit(book)}>Save</FormBtn>
                             <FormBtn onClick={handleFormSubmit}>View</FormBtn>
                             </span>
                              <h5>{book.volumeInfo.title} by {book.volumeInfo.authors.map((author) => author+" ")}</h5>
@@ -114,9 +113,7 @@ function Search() {
                         </ListItem>
                       ))}
                     </List>
-                    ) : (
-                      <p>Search for books</p>
-                    ) 
+                    ) : (<p>Search results</p>) 
                   }
                 </Col>
               </Row>
