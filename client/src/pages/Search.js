@@ -11,7 +11,7 @@ import Subheading from "../components/Subheading";
 function Search() {
   // Setting our component's initial state
   const [books, setBooks] = useState([])
-  const [formObject, setFormObject] = useState({})
+  const [bookObject, setbookObject] = useState({})
 
   // Load all books and store them with setBooks
   useEffect(() => {
@@ -37,18 +37,18 @@ function Search() {
   // Handles updating component state when the user types into the input field
   function handleInputChange(event) {
     const { name, value } = event.target;
-    setFormObject({...formObject, [name]: value})
+    setbookObject({...bookObject, [name]: value})
   };
 
   // When the form is submitted, use the API.saveBook method to save the book data
   // Then reload books from the database
   function handleFormSubmit(event) {
     event.preventDefault();
-    if (formObject.title && formObject.author) {
+    if (bookObject.title && bookObject.author) {
       API.saveBook({
-        title: formObject.title,
-        author: formObject.author,
-        synopsis: formObject.synopsis
+        title: bookObject.title,
+        author: bookObject.author,
+        synopsis: bookObject.synopsis
       })
         .then(res => loadBooks())
         .catch(err => console.log(err));
@@ -93,22 +93,18 @@ function Search() {
             <div style={{margin: 10}}>
               <Row>          
                 <Col size="md-12">
-                  {books.length ? (
                     <List>
                       {books.map(book => (
                         <ListItem key={book._id}>
                           <Link to={"/search/" + book._id}>
                             <strong>
-                              {book.title} by {book.author} id {book._id}
+                              {book.title} by {book.author}
                             </strong>
                           </Link>
                           <DeleteBtn onClick={() => deleteBook(book._id)} />
                         </ListItem>
                       ))}
                     </List>
-                  ) : (
-                    <h4>No Results to Display</h4>
-                  )}
                 </Col>
               </Row>
             </div>

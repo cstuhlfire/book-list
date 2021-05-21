@@ -1,51 +1,45 @@
-import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { Col, Row, Container } from "../components/Grid";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { Col, Row } from "../components/Grid";
 import Jumbotron from "../components/Jumbotron";
 import API from "../utils/API";
+import Subheading from "../components/Subheading";
 
-function Saved(props) {
-  const [book, setBook] = useState({})
-
-  // When this component mounts, grab the book with the _id of props.match.params.id
-  // e.g. localhost:3000/books/599dcb67f0f16317844583fc
-  const {id} = useParams()
-  console.log("id: "+id);
-  
+function Saved() {
+  const [books, setBooks] = useState({})
+ 
   useEffect(() => {
 
-    API.getBook(id)
-      .then(res => setBook(res.data))
+    API.getBooks()
+      .then(res => setBooks(res.data))
       .catch(err => console.log(err));
-  }, [id])
+  }, [])
+
+  console.log(books);
 
   return (
-      <Container fluid>
-        <Row>
-          <Col size="md-12">
-            <Jumbotron>
-              <h1>
-                {book.title} by {book.author}
-              </h1>
-            </Jumbotron>
-          </Col>
-        </Row>
-        <Row>
-          <Col size="md-10 md-offset-1">
-            <article>
-              <h1>Synopsis</h1>
-              <p>
-                {book.synopsis}
-              </p>
-            </article>
-          </Col>
-        </Row>
-        <Row>
-          <Col size="md-2">
-            <Link to="/">← Back to Authors</Link>
-          </Col>
-        </Row>
-      </Container>
+    <div className="container">
+    <Row>
+      <Col size="md-12">
+        <Jumbotron>
+          <h2>Google Books Search</h2>
+          <h5>Search Google Books and Build the Ultimate Book List</h5>
+        </Jumbotron>
+      </Col>
+     </Row> 
+
+      <Subheading>
+        <h5 style={{margin: 10,}}>Saved Books</h5>
+        <hr></hr>     
+        <div style={{margin: 10}}>
+          <Row>          
+            <Col size="md-12">
+
+            </Col>
+          </Row>
+        </div>
+      </Subheading>
+    </div>
     );
   }
 
