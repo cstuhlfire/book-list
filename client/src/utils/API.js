@@ -1,6 +1,6 @@
 import axios from "axios";
 
-let bookString = " https://www.googleapis.com/books/v1/volumes?q=flowers+inauthor";
+let bookString = "https://www.googleapis.com/books/v1/volumes?q='harry potter'";
 
 export default {
   // Gets google books by search criterial

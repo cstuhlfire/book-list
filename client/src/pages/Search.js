@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
-import DeleteBtn from "../components/DeleteBtn";
 import Jumbotron from "../components/Jumbotron";
 import API from "../utils/API";
-import { Link } from "react-router-dom";
 import { Col, Row } from "../components/Grid";
 import { List, ListItem } from "../components/List";
 import { Input, FormBtn } from "../components/Form";
@@ -13,20 +11,14 @@ function Search() {
   const [books, setBooks] = useState([])
   const [bookObject, setbookObject] = useState({})
 
-  // Load all books and store them with setBooks
-  useEffect(() => {
-    loadBooks()
-  }, [])
-
   // Loads all books and sets them to books
   function loadBooks() {
-    API.getBooks()
+    API.getGoogleBooks(bookObject.searchString)
       .then(res => 
-        setBooks(res.data)
+        setBooks(res.data.items)
       )
       .catch(err => console.log(err));
   };
-
 
   // Handles updating component state when the user types into the input field
   function handleInputChange(event) {
@@ -38,16 +30,26 @@ function Search() {
   // Then reload books from the database
   function handleFormSubmit(event) {
     event.preventDefault();
-    if (bookObject.title && bookObject.author) {
-      API.saveBook({
-        title: bookObject.title,
-        author: bookObject.author,
-        synopsis: bookObject.synopsis
-      })
-        .then(res => loadBooks())
-        .catch(err => console.log(err));
-    }
+    API.getGoogleBooks(bookObject.searchString)
+    .then(res => 
+      setBooks(res.data.items)
+    )
+    .catch(err => console.log(err));
+
   };
+  
+  // function handleSave(event) {
+  //   event.preventDefault();
+  //   if (bookObject.title && bookObject.author) {
+  //     API.saveBook({
+  //       title: bookObject.title,
+  //       author: bookObject.author,
+  //       synopsis: bookObject.synopsis
+  //     })
+  //       .then(res => loadBooks())
+  //       .catch(err => console.log(err));
+  //   }
+  // };
 
     return (
       <div className="container">
@@ -69,8 +71,8 @@ function Search() {
                     <form>
                       <Input
                         onChange={handleInputChange}
-                        name="title"
-                        placeholder="Title (required)"
+                        name="searchString"
+                        placeholder="Book search string"
                       />
                       <FormBtn onClick={handleFormSubmit}
                       >Search
@@ -87,21 +89,27 @@ function Search() {
             <div style={{margin: 10}}>
               <Row>          
                 <Col size="md-12">
+                  {books.length ? (
+
                     <List>
                       {books.map(book => (
-                        <ListItem key={book._id}>
+                        <ListItem key={1}>
                           <div>
                             <FormBtn onClick={handleFormSubmit}>Save</FormBtn>
                             <FormBtn onClick={handleFormSubmit}>View</FormBtn>
                           </div>
                           <div>
                             <strong>
-                              {book.title} by {book.author}
+                              {book.volumeInfo.title}
                             </strong>
                           </div>
                         </ListItem>
                       ))}
                     </List>
+                    ) : (
+                      <p>Search for books</p>
+                    ) 
+                  }
                 </Col>
               </Row>
             </div>
