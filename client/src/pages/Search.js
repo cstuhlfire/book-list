@@ -27,12 +27,6 @@ function Search() {
       .catch(err => console.log(err));
   };
 
-  // Deletes a book from the database with a given id, then reloads books from the db
-  function deleteBook(id) {
-    API.deleteBook(id)
-      .then(res => loadBooks())
-      .catch(err => console.log(err));
-  }
 
   // Handles updating component state when the user types into the input field
   function handleInputChange(event) {
@@ -96,12 +90,15 @@ function Search() {
                     <List>
                       {books.map(book => (
                         <ListItem key={book._id}>
-                          <Link to={"/search/" + book._id}>
+                          <div>
+                            <FormBtn onClick={handleFormSubmit}>Save</FormBtn>
+                            <FormBtn onClick={handleFormSubmit}>View</FormBtn>
+                          </div>
+                          <div>
                             <strong>
                               {book.title} by {book.author}
                             </strong>
-                          </Link>
-                          <DeleteBtn onClick={() => deleteBook(book._id)} />
+                          </div>
                         </ListItem>
                       ))}
                     </List>

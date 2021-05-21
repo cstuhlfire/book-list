@@ -5,13 +5,11 @@ import API from "../utils/API";
 import { Link } from "react-router-dom";
 import { Col, Row } from "../components/Grid";
 import { List, ListItem } from "../components/List";
-import { Input, FormBtn } from "../components/Form";
 import Subheading from "../components/Subheading";
 
 function Search() {
   // Setting our component's initial state
   const [books, setBooks] = useState([])
-  const [bookObject, setbookObject] = useState({})
 
   // Load all books and store them with setBooks
   useEffect(() => {
@@ -33,27 +31,6 @@ function Search() {
       .then(res => loadBooks())
       .catch(err => console.log(err));
   }
-
-  // Handles updating component state when the user types into the input field
-  function handleInputChange(event) {
-    const { name, value } = event.target;
-    setbookObject({...bookObject, [name]: value})
-  };
-
-  // When the form is submitted, use the API.saveBook method to save the book data
-  // Then reload books from the database
-  function handleFormSubmit(event) {
-    event.preventDefault();
-    if (bookObject.title && bookObject.author) {
-      API.saveBook({
-        title: bookObject.title,
-        author: bookObject.author,
-        synopsis: bookObject.synopsis
-      })
-        .then(res => loadBooks())
-        .catch(err => console.log(err));
-    }
-  };
 
     return (
       <div className="container">

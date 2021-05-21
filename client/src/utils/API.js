@@ -1,8 +1,13 @@
 import axios from "axios";
 
-// https://www.googleapis.com/books/v1/volumes?q=flowers+inauthor
+let bookString = " https://www.googleapis.com/books/v1/volumes?q=flowers+inauthor";
+
 export default {
-  // Gets all books
+  // Gets google books by search criterial
+  getGoogleBooks: function() {
+    return axios.get(bookString);
+  },
+  // Gets all database books
   getBooks: function() {
     return axios.get("/api/books");
   },
