@@ -6,8 +6,9 @@ import { Link } from "react-router-dom";
 import { Col, Row } from "../components/Grid";
 import { List, ListItem } from "../components/List";
 import { Input, FormBtn } from "../components/Form";
+import Subheading from "../components/Subheading";
 
-function Books() {
+function Search() {
   // Setting our component's initial state
   const [books, setBooks] = useState([])
   const [formObject, setFormObject] = useState({})
@@ -64,45 +65,57 @@ function Books() {
             </Jumbotron>
           </Col>
          </Row> 
-         
-          <Row>
-            <Col size="md-12">
-                <form>
-                  <Input
-                    onChange={handleInputChange}
-                    name="title"
-                    placeholder="Title (required)"
-                  />
-                  <FormBtn onClick={handleFormSubmit}
-                  >Search
-                  </FormBtn>
-                </form>
-            </Col>
-          </Row> 
-          
-         <Row>          
-          <Col size="md-12">
-            {books.length ? (
-              <List>
-                {books.map(book => (
-                  <ListItem key={book._id}>
-                    <Link to={"/books/" + book._id}>
-                      <strong>
-                        {book.title} by {book.author}
-                      </strong>
-                    </Link>
-                    <DeleteBtn onClick={() => deleteBook(book._id)} />
-                  </ListItem>
-                ))}
-              </List>
-            ) : (
-              <h3>No Results to Display</h3>
-            )}
-          </Col>
-        </Row>
+
+          <Subheading>
+            <h5 style={{margin: 10,}}>Book Search</h5>
+            <hr></hr>
+            <div style={{margin: 10}}>
+              <Row >
+                <Col size="md-12">
+                    <form>
+                      <Input
+                        onChange={handleInputChange}
+                        name="title"
+                        placeholder="Title (required)"
+                      />
+                      <FormBtn onClick={handleFormSubmit}
+                      >Search
+                      </FormBtn>
+                    </form>
+                </Col>
+              </Row>
+            </div>
+          </Subheading>
+ 
+          <Subheading>
+            <h5 style={{margin: 10,}}>Results</h5>
+            <hr></hr>     
+            <div style={{margin: 10}}>
+              <Row>          
+                <Col size="md-12">
+                  {books.length ? (
+                    <List>
+                      {books.map(book => (
+                        <ListItem key={book._id}>
+                          <Link to={"/search/" + book._id}>
+                            <strong>
+                              {book.title} by {book.author} id {book._id}
+                            </strong>
+                          </Link>
+                          <DeleteBtn onClick={() => deleteBook(book._id)} />
+                        </ListItem>
+                      ))}
+                    </List>
+                  ) : (
+                    <h4>No Results to Display</h4>
+                  )}
+                </Col>
+              </Row>
+            </div>
+          </Subheading>
     </div>
     );
   }
 
 
-export default Books;
+export default Search;
