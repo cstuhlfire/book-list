@@ -7,7 +7,7 @@ function Nav() {
         <Link className="navbar-brand" to="/">Ultimate Book List</Link>
         <div>
           <ul className="navbar-nav" style={{paddingLeft: 25}}>
-            <li className="nav-item active">
+            <li className="nav-itemnp">
               <Link className="nav-link" to="/">Search</Link>
             </li>
             <li className="nav-item">
