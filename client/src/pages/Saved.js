@@ -58,11 +58,13 @@ function Search() {
                     <List>
                       {books.map(book => (
                         <ListItem key={book._id}>
+                          <div style={{paddingBottom: 30}}>
                           <span>
                             <DeleteBtn onClick={() => deleteBook(book._id)} />
                             <FormBtn onClick={() => viewBook(book.link)}>View</FormBtn>
                              <h5>{book.title} by {book.author}</h5>
                           </span>  
+                          </div>
                           <Row>
                               <Col size="md-2">
                                   {(book.image) ? (
