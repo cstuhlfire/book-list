@@ -37,6 +37,7 @@ function Search() {
     window.open(link, "_blank");
   }
 
+  console.log(books);
     return (
       <div className="container">
         <Row>
@@ -57,11 +58,22 @@ function Search() {
                     <List>
                       {books.map(book => (
                         <ListItem key={book._id}>
-                            <strong>
-                              {book.title} by {book.author}
-                            </strong>
-                          <DeleteBtn onClick={() => deleteBook(book._id)} />
-                          <FormBtn onClick={() => viewBook(book.link)}>View</FormBtn>
+                          <span>
+                            <DeleteBtn onClick={() => deleteBook(book._id)} />
+                            <FormBtn onClick={() => viewBook(book.link)}>View</FormBtn>
+                             <h5>{book.title} by {book.author}</h5>
+                          </span>  
+                          <Row>
+                              <Col size="md-2">
+                                  {(book.image) ? (
+                                    <img src={book.image} alt={book.title}/>
+                                  ) : (<img src="" alt={book.title}/>)}
+                              </Col>
+                              <Col size="md-8">
+                                  <p>{book.description}</p>
+                              </Col>
+                          </Row>
+
                         </ListItem>
                       ))}
                     </List>

@@ -87,7 +87,6 @@ function Search() {
      let currentBook = saveBook[index];
 
      let saveBookObj = parseSaveBook(currentBook);
-     console.log(saveBookObj);
 
     if (saveBookObj.title) {
       API.saveBook({
@@ -112,7 +111,6 @@ function Search() {
     window.open(saveBookObj.link, "_blank");
    };
 
-  console.log(books);
     return (
       <div className="container">
         <Row>
