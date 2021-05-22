@@ -4,6 +4,7 @@ import Jumbotron from "../components/Jumbotron";
 import API from "../utils/API";
 import { Col, Row } from "../components/Grid";
 import { List, ListItem } from "../components/List";
+import { FormBtn } from "../components/Form";
 import Subheading from "../components/Subheading";
 
 function Search() {
@@ -30,6 +31,11 @@ function Search() {
       .then(res => loadBooks())
       .catch(err => console.log(err));
   }
+  
+  function viewBook(link) {  
+    console.log(link);  
+    window.open(link, "_blank");
+  }
 
     return (
       <div className="container">
@@ -55,6 +61,7 @@ function Search() {
                               {book.title} by {book.author}
                             </strong>
                           <DeleteBtn onClick={() => deleteBook(book._id)} />
+                          <FormBtn onClick={() => viewBook(book.link)}>View</FormBtn>
                         </ListItem>
                       ))}
                     </List>

@@ -70,6 +70,7 @@ function Search() {
 
     // create object
     let saveBookObj = {
+      id: currentBook.id,
       title: title.trim(),
       author: authorList.trim(),
       description: description.trim(),
@@ -90,16 +91,26 @@ function Search() {
 
     if (saveBookObj.title) {
       API.saveBook({
+        id: saveBookObj.id,
         title: saveBookObj.title,
         author: saveBookObj.author,
         description: saveBookObj.description,
         image: saveBookObj.image,
         link: saveBookObj.link
       })
-        .then(res => console.log("Books saved"))
+        .then(res => console.log("Book saved"))
         .catch(err => console.log(err));
     }
   };
+
+  function handleViewSubmit(event) {
+    let index = 0;
+    let saveBook = books.filter((book) => book.id === event.target.value);
+    let currentBook = saveBook[index];
+
+    let saveBookObj = parseSaveBook(currentBook);
+    window.open(saveBookObj.link, "_blank");
+   };
 
   console.log(books);
     return (
@@ -148,7 +159,7 @@ function Search() {
                          <div style={{paddingBottom: 30}}>
                             <span>
                             <FormBtn value={book.id} onClick={handleSaveSubmit}>Save</FormBtn>
-                            <FormBtn value={book.id} onClick={handleFormSubmit}>View</FormBtn>
+                            <FormBtn value={book.id} onClick={handleViewSubmit}>View</FormBtn>
                             </span>
                               {book.volumeInfo.hasOwnProperty("authors") ? (
                                 <h5>{book.volumeInfo.title} by {book.volumeInfo.authors.map((author) => author+" ")}</h5>
