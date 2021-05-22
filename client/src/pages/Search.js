@@ -8,8 +8,8 @@ import Subheading from "../components/Subheading";
 
 function Search() {
   // Setting our component's initial state
-  const [books, setBooks] = useState([])
-  const [bookObject, setbookObject] = useState({})
+  let [books, setBooks] = useState([])
+  let [bookObject, setbookObject] = useState({})
 
   // Handles updating component state when the user types into the input field
   function handleInputChange(event) {
@@ -30,25 +30,77 @@ function Search() {
       else {
         setBooks(res.data.items);
       }
-
     })
     .catch(err => console.log(err));
-
   };
   
- 
-  function handleSaveSubmit(book) {
-     console.log(book);
-    if (book.volumeInfo.title) {
+  // parse book object data to validate and create an object that can be saved
+  function parseSaveBook(currentBook) {
+    let index = 0;
+    let title = "";
+    let authorList = "";
+    let description = "";
+    let image = "";
+    let bookLink = "";
+    
+    // parse the book object data
+    if (currentBook.volumeInfo.hasOwnProperty("title")) {
+      title = currentBook.volumeInfo.title;
+    }
+
+    if (currentBook.volumeInfo.hasOwnProperty("authors")) {
+      if (currentBook.volumeInfo.authors.length > 1) {
+        authorList += currentBook.volumeInfo.authors.map((author) => " "+author);
+      } else {
+        authorList = currentBook.volumeInfo.authors[index];
+      }
+    }
+
+    if (currentBook.volumeInfo.hasOwnProperty("description")) {
+      description = currentBook.volumeInfo.description;
+    }
+
+    if (currentBook.volumeInfo.hasOwnProperty("imageLinks")) {
+      image = currentBook.volumeInfo.imageLinks.smallThumbnail;
+    }
+
+    if (currentBook.volumeInfo.hasOwnProperty("infoLink")) {
+      bookLink = currentBook.volumeInfo.infoLink;
+    }
+
+    // create object
+    let saveBookObj = {
+      title: title.trim(),
+      author: authorList.trim(),
+      description: description.trim(),
+      image: image.trim(),
+      link: bookLink.trim()
+    }
+
+    return saveBookObj;
+  }
+
+  function handleSaveSubmit(event) {
+     let index = 0;
+     let saveBook = books.filter((book) => book.id === event.target.value);
+     let currentBook = saveBook[index];
+
+     let saveBookObj = parseSaveBook(currentBook);
+     console.log(saveBookObj);
+
+    if (saveBookObj.title) {
       API.saveBook({
-        title: book.volumeInfo.title,
-        author: book.volumeInfo.authors[0],
-        description: book.volumeInfo.description
+        title: saveBookObj.title,
+        author: saveBookObj.author,
+        description: saveBookObj.description,
+        image: saveBookObj.image,
+        link: saveBookObj.link
       })
-        .then(res => alert("Books saved"))
+        .then(res => console.log("Books saved"))
         .catch(err => console.log(err));
     }
   };
+
   console.log(books);
     return (
       <div className="container">
@@ -95,10 +147,12 @@ function Search() {
                          <ListItem key={book.id}>
                          <div style={{paddingBottom: 30}}>
                             <span>
-                            <FormBtn onClick={() => handleSaveSubmit(book)}>Save</FormBtn>
-                            <FormBtn onClick={handleFormSubmit}>View</FormBtn>
+                            <FormBtn value={book.id} onClick={handleSaveSubmit}>Save</FormBtn>
+                            <FormBtn value={book.id} onClick={handleFormSubmit}>View</FormBtn>
                             </span>
-                             <h5>{book.volumeInfo.title} by {book.volumeInfo.authors.map((author) => author+" ")}</h5>
+                              {book.volumeInfo.hasOwnProperty("authors") ? (
+                                <h5>{book.volumeInfo.title} by {book.volumeInfo.authors.map((author) => author+" ")}</h5>
+                              ) : <h5>{book.volumeInfo.title}</h5>}
                           </div>
                           <Row>
                               <Col size="md-2">
