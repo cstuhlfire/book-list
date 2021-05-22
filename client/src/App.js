@@ -17,8 +17,8 @@ function App() {
           <Route exact path="/saved">
             <Saved />
           </Route>
-          <Route>
-            <NoMatch />
+          <Route path="*">
+            <Search />
           </Route>
         </Switch>
       </div>
